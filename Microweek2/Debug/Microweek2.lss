@@ -340,10 +340,10 @@ Version :    	DMK, Initial code
  1f4:	18 95       	reti
 
 000001f6 <main>:
+notes:			Slow background task after init ISR
 Version :    	DMK, Initial code
 *******************************************************************/
 {
-	
 	// Init I/O
 	DDRD = 0xF0;			// PORTD(7:4) output, PORTD(3:0) input	
  1f6:	80 ef       	ldi	r24, 0xF0	; 240
