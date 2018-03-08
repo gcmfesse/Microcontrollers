@@ -15,6 +15,8 @@ void lcd_write_at(int, char *str);
 /******************************************************************/
 void lcd_strobe_lcd_e(void)
 
+#define BIT(x)	(1 << (x))
+
 /*
 short:			Strobe LCD module E pin --__
 inputs:
@@ -200,8 +202,8 @@ Version :    	DMK, Initial code
 void timer2Init( void )
 {
 	TCNT2 = -10; // Compare value of counter 2
-	TIMSK |= 0x02; // T2 compare match interrupt enable
-	SREG |= 0x01; // turn_on intr all
+	TIMSK |= BIT(6); // T2 compare match interrupt enable
+	//SREG |= BIT(7); // turn_on intr all
 	TCCR2 = 0b00000111;
 }
 
@@ -209,7 +211,7 @@ ISR( TIMER2_OVF_vect )
 {
 	TCNT2 = -10;
 	tenthValue++; // Increment counter
-	lcd_write_string("HALLO");
+	lcd_write_string(tenthValue);
 	
 }
 
@@ -236,7 +238,7 @@ Version :    	DMK, Initial code
 *******************************************************************/
 {
 	
-	DDRD &= 0x01; // set PORTD.7 for input
+	DDRD &= BIT(7); // set PORTD.7 for input
 	DDRB = 0xFF; // PORTB is output
 	DDRA = 0xFF;
 	
