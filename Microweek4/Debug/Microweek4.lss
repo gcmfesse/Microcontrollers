@@ -11,21 +11,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000224  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000068  00000000  00000000  00000260  2**0
+  4 .debug_aranges 00000078  00000000  00000000  00000260  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000cbd  00000000  00000000  000002c8  2**0
+  5 .debug_info   00000dcf  00000000  00000000  000002d8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000008ab  00000000  00000000  00000f85  2**0
+  6 .debug_abbrev 000008f7  00000000  00000000  000010a7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000499  00000000  00000000  00001830  2**0
+  7 .debug_line   00000515  00000000  00000000  0000199e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000bc  00000000  00000000  00001ccc  2**2
+  8 .debug_frame  0000010c  00000000  00000000  00001eb4  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000492  00000000  00000000  00001d88  2**0
+  9 .debug_str    000004c3  00000000  00000000  00001fc0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000000e8  00000000  00000000  0000221a  2**0
+ 10 .debug_loc    00000246  00000000  00000000  00002483  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000058  00000000  00000000  00002302  2**0
+ 11 .debug_ranges 00000080  00000000  00000000  000026c9  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -195,7 +195,7 @@ void displayOff()
  116:	df df       	rcall	.-66     	; 0xd6 <spi_slaveSelect>
  118:	8a e0       	ldi	r24, 0x0A	; 10
  11a:	d9 df       	rcall	.-78     	; 0xce <spi_write>
- 11c:	84 e0       	ldi	r24, 0x04	; 4
+ 11c:	8f e0       	ldi	r24, 0x0F	; 15
  11e:	d7 df       	rcall	.-82     	; 0xce <spi_write>
  120:	80 e0       	ldi	r24, 0x00	; 0
  122:	e5 df       	rcall	.-54     	; 0xee <spi_slaveDeSelect>
@@ -203,7 +203,7 @@ void displayOff()
  126:	d7 df       	rcall	.-82     	; 0xd6 <spi_slaveSelect>
  128:	8b e0       	ldi	r24, 0x0B	; 11
  12a:	d1 df       	rcall	.-94     	; 0xce <spi_write>
- 12c:	81 e0       	ldi	r24, 0x01	; 1
+ 12c:	83 e0       	ldi	r24, 0x03	; 3
  12e:	cf df       	rcall	.-98     	; 0xce <spi_write>
  130:	80 e0       	ldi	r24, 0x00	; 0
  132:	dd df       	rcall	.-70     	; 0xee <spi_slaveDeSelect>

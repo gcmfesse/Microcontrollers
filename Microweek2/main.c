@@ -74,15 +74,15 @@ notes:			Set PORTD.5
 Version :    	DMK, Initial code
 *******************************************************************/
 {
-	//if(x<=8){
-		//PORTD |= (1<<x);
-		//x++;
-	//}	
-	if(x==15){
-		x=0;
-	}
-	PORTC = Numbers[x];
-	x++;
+	if(x<=8){
+		PORTD |= (1<<x);
+		x++;
+	}	
+	//if(x==15){
+		//x=0;
+	//}
+	//PORTC = Numbers[x];
+	//x++;
 		wait(1000);
 }
 
@@ -96,15 +96,15 @@ notes:			Clear PORTD.5
 Version :    	DMK, Initial code
 *******************************************************************/
 {
-	//if(x>=4){
-		//PORTD &= ~(1<<x);
-		//x--;
-	//}
-	PORTC = Numbers[x];
-	x--;
-	if(x==0){
-		x=15;
+	if(x>=4){
+		PORTD &= ~(1<<x);
+		x--;
 	}
+	//PORTC = Numbers[x];
+	//x--;
+	//if(x==0){
+		//x=15;
+	//}
 	wait(1000);
 				
 }
