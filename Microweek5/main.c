@@ -1,3 +1,4 @@
+#define F_CPU 8000000UL
 /*
 * Project name : Demo5_7a : spi - 7 segments display
 * Author : Avans-TI, WvdE, JW
@@ -14,7 +15,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-
 
 #define BIT(x) ( 1<<x )
 #define DDR_SPI DDRB // spi Data direction register
@@ -47,101 +47,101 @@ const unsigned char NumbersDotted[10] =
 
 void wait(int ms)
 {
-for (int i=0; i<ms; i++)
-_delay_ms(1);
+	for (int i=0; i<ms; i++)
+	_delay_ms(1);
 }
 
 void spi_masterInit(void)
 {
-DDR_SPI = 0xff; // All pins output: MOSI, SCK, SS, SS_display
-DDR_SPI &= ~BIT(SPI_MISO); // except: MISO input
-PORT_SPI |= BIT(SPI_SS); // SS_ADC == 1: deselect slave
-SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1); // or: SPCR = 0b11010010;
-// Enable spi, MasterMode, Clock rate fck/64
-// bitrate=125kHz, Mode = 0: CPOL=0, CPPH=0
+	DDR_SPI = 0xff; // All pins output: MOSI, SCK, SS, SS_display
+	DDR_SPI &= ~BIT(SPI_MISO); // except: MISO input
+	PORT_SPI |= BIT(SPI_SS); // SS_ADC == 1: deselect slave
+	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1); // or: SPCR = 0b11010010;
+	// Enable spi, MasterMode, Clock rate fck/64
+	// bitrate=125kHz, Mode = 0: CPOL=0, CPPH=0
 }
 
 // Write a byte from master to slave
 void spi_write( unsigned char data )
 {
-SPDR = data; // Load byte --> starts transmission
-while( !(SPSR & BIT(SPIF)) ); // Wait for transmission complete
+	SPDR = data; // Load byte --> starts transmission
+	while( !(SPSR & BIT(SPIF)) ); // Wait for transmission complete
 }
 
 // Write a byte from master to slave and read a byte from slave - not used here
 char spi_writeRead( unsigned char data )
 {
-SPDR = data; // Load byte --> starts transmission
-while( !(SPSR & BIT(SPIF)) ); // Wait for transmission complete
-data = SPDR; // New received data (eventually, MISO) in SPDR
-return data; // Return received byte
+	SPDR = data; // Load byte --> starts transmission
+	while( !(SPSR & BIT(SPIF)) ); // Wait for transmission complete
+	data = SPDR; // New received data (eventually, MISO) in SPDR
+	return data; // Return received byte
 }
 
 // Select device on pinnumer PORTB
 void spi_slaveSelect(unsigned char chipNumber)
 {
-PORTB &= ~BIT(chipNumber);
+	PORTB &= ~BIT(chipNumber);
 }
 
 // Deselect device on pinnumer PORTB
 void spi_slaveDeSelect(unsigned char chipNumber)
 {
-PORTB |= BIT(chipNumber);
+	PORTB |= BIT(chipNumber);
 }
 
 // Initialize the driver chip (type MAX 7219)
 void displayDriverInit()
 {
-spi_slaveSelect(0); // Select display chip (MAX7219)
- spi_write(0x09); // Register 09: Decode Mode
- spi_write(0xFF); // -> 1's = BCD mode for all digits
- spi_slaveDeSelect(0); // Deselect display chip
- spi_slaveSelect(0); // Select dispaly chip
- spi_write(0x0A); // Register 0A: Intensity
- spi_write(0x04); // -> Level 4 (in range [1..F])				
- spi_slaveDeSelect(0); // Deselect display chip
- spi_slaveSelect(0); // Select display chip
- spi_write(0x0B); // Register 0B: Scan-limit
- spi_write(0x03); // -> 1 = Display digits 0..1						
- spi_slaveDeSelect(0); // Deselect display chip
- spi_slaveSelect(0); // Select display chip
- spi_write(0x0C); // Register 0B: Shutdown register
- spi_write(0x01); // -> 1 = Normal operation
- spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select display chip (MAX7219)
+	spi_write(0x09); // Register 09: Decode Mode
+	spi_write(0xFF); // -> 1's = BCD mode for all digits
+	spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select dispaly chip
+	spi_write(0x0A); // Register 0A: Intensity
+	spi_write(0x04); // -> Level 4 (in range [1..F])				
+	spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select display chip
+	spi_write(0x0B); // Register 0B: Scan-limit
+	spi_write(0x03); // -> 1 = Display digits 0..1						
+	spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select display chip
+	spi_write(0x0C); // Register 0B: Shutdown register
+	spi_write(0x01); // -> 1 = Normal operation
+	spi_slaveDeSelect(0); // Deselect display chip
 }
 
 // Set display on ('normal operation')
 void displayOn()
 {
- spi_slaveSelect(0); // Select display chip
- spi_write(0x0C); // Register 0B: Shutdown register
- spi_write(0x01); // -> 1 = Normal operation
- spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select display chip
+	spi_write(0x0C); // Register 0B: Shutdown register
+	spi_write(0x01); // -> 1 = Normal operation
+	spi_slaveDeSelect(0); // Deselect display chip
 }
 
 // Set display off ('shut down')
 void displayOff()
 {
- spi_slaveSelect(0); // Select display chip
- spi_write(0x0C); // Register 0B: Shutdown register
- spi_write(0x00); // -> 1 = Normal operation
- spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select display chip
+	spi_write(0x0C); // Register 0B: Shutdown register
+	spi_write(0x00); // -> 1 = Normal operation
+	spi_slaveDeSelect(0); // Deselect display chip
 }
 
 int main()
 {
-DDRB=0x01; // Set PB0 pin as output for display select
-DDRC = 0xFF;
-DDRD = 0xFF;
-DDRD &= ~(1 << PIND1);
-DDRD &= ~(1 << PIND0);
+	DDRB=0x01; // Set PB0 pin as output for display select
+	DDRC = 0xFF;
+	DDRD = 0xFF;
+	DDRD &= ~(1 << PIND1);
+	DDRD &= ~(1 << PIND0);
 
-EICRA = 0x0B;
-EIMSK = 0x03;
+	EICRA = 0x0B;
+	EIMSK = 0x03;
 
-timer1Init();
-spi_masterInit(); // Initialize spi module
-displayDriverInit(); // Initialize display chip
+	timer1Init();
+	spi_masterInit(); // Initialize spi module
+	displayDriverInit(); // Initialize display chip
 // clear display (all zero's)
 for (char i =1; i<=4; i++)
 {
@@ -151,16 +151,16 @@ for (char i =1; i<=4; i++)
 	spi_slaveDeSelect(0); // Deselect display chip
 }
 // set first dot for hours
-spi_slaveSelect(0); // Select display chip
-spi_write(3); // digit adress: (digit place)
-spi_write(NumbersDotted[0]); // digit value: 0
-spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select display chip
+	spi_write(3); // digit adress: (digit place)
+	spi_write(NumbersDotted[0]); // digit value: 0
+	spi_slaveDeSelect(0); // Deselect display chip
 
 while(1){
 	wait(10);
 }
 
- return (1);
+	return (1);
 }
 
 void spi_writeWord(unsigned char adress, unsigned char data){
@@ -189,7 +189,7 @@ void writeLedDisplay(int value, int startpos){
 }
 
 void timer1Init(void){
-	OCR1A = 31500; // 16-bits compare value of counter 1
+	OCR1A = 31250; // 16-bits compare value of counter 1
 	TIMSK |= BIT(4); // T1 compare match A interrupt enable
 	TCCR1A = 0b00000000; // Initialize T1: timer, prescaler=256,
 	TCCR1B = 0b00001100; // compare output disconnected, CTC, RUN

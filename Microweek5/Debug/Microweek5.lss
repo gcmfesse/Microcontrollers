@@ -149,17 +149,17 @@ Disassembly of section .text:
 000000c8 <wait>:
 void displayOff()
 {
- spi_slaveSelect(0); // Select display chip
- spi_write(0x0C); // Register 0B: Shutdown register
- spi_write(0x00); // -> 1 = Normal operation
- spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveSelect(0); // Select display chip
+	spi_write(0x0C); // Register 0B: Shutdown register
+	spi_write(0x00); // -> 1 = Normal operation
+	spi_slaveDeSelect(0); // Deselect display chip
   c8:	18 16       	cp	r1, r24
   ca:	19 06       	cpc	r1, r25
   cc:	6c f4       	brge	.+26     	; 0xe8 <wait+0x20>
   ce:	20 e0       	ldi	r18, 0x00	; 0
   d0:	30 e0       	ldi	r19, 0x00	; 0
-  d2:	e9 ef       	ldi	r30, 0xF9	; 249
-  d4:	f0 e0       	ldi	r31, 0x00	; 0
+  d2:	ef ec       	ldi	r30, 0xCF	; 207
+  d4:	f7 e0       	ldi	r31, 0x07	; 7
   d6:	31 97       	sbiw	r30, 0x01	; 1
   d8:	f1 f7       	brne	.-4      	; 0xd6 <wait+0xe>
   da:	00 c0       	rjmp	.+0      	; 0xdc <wait+0x14>
@@ -251,7 +251,7 @@ void displayOff()
 00000170 <spi_writeWord>:
 }
 
- return (1);
+	return (1);
 }
 
 void spi_writeWord(unsigned char adress, unsigned char data){
@@ -347,9 +347,9 @@ void writeLedDisplay(int value, int startpos){
 000001e2 <timer1Init>:
 
 void timer1Init(void){
-	OCR1A = 31500; // 16-bits compare value of counter 1
- 1e2:	8c e0       	ldi	r24, 0x0C	; 12
- 1e4:	9b e7       	ldi	r25, 0x7B	; 123
+	OCR1A = 31250; // 16-bits compare value of counter 1
+ 1e2:	82 e1       	ldi	r24, 0x12	; 18
+ 1e4:	9a e7       	ldi	r25, 0x7A	; 122
  1e6:	9b bd       	out	0x2b, r25	; 43
  1e8:	8a bd       	out	0x2a, r24	; 42
 	TIMSK |= BIT(4); // T1 compare match A interrupt enable
@@ -366,36 +366,36 @@ void timer1Init(void){
  1f8:	08 95       	ret
 
 000001fa <main>:
- spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveDeSelect(0); // Deselect display chip
 }
 
 int main()
 {
-DDRB=0x01; // Set PB0 pin as output for display select
+	DDRB=0x01; // Set PB0 pin as output for display select
  1fa:	81 e0       	ldi	r24, 0x01	; 1
  1fc:	87 bb       	out	0x17, r24	; 23
-DDRC = 0xFF;
+	DDRC = 0xFF;
  1fe:	8f ef       	ldi	r24, 0xFF	; 255
  200:	84 bb       	out	0x14, r24	; 20
-DDRD = 0xFF;
+	DDRD = 0xFF;
  202:	81 bb       	out	0x11, r24	; 17
-DDRD &= ~(1 << PIND1);
+	DDRD &= ~(1 << PIND1);
  204:	89 98       	cbi	0x11, 1	; 17
-DDRD &= ~(1 << PIND0);
+	DDRD &= ~(1 << PIND0);
  206:	88 98       	cbi	0x11, 0	; 17
 
-EICRA = 0x0B;
+	EICRA = 0x0B;
  208:	8b e0       	ldi	r24, 0x0B	; 11
  20a:	80 93 6a 00 	sts	0x006A, r24	; 0x80006a <__TEXT_REGION_LENGTH__+0x7e006a>
-EIMSK = 0x03;
+	EIMSK = 0x03;
  20e:	83 e0       	ldi	r24, 0x03	; 3
  210:	89 bf       	out	0x39, r24	; 57
 
-timer1Init();
+	timer1Init();
  212:	e7 df       	rcall	.-50     	; 0x1e2 <timer1Init>
-spi_masterInit(); // Initialize spi module
+	spi_masterInit(); // Initialize spi module
  214:	6a df       	rcall	.-300    	; 0xea <spi_masterInit>
-displayDriverInit(); // Initialize display chip
+	displayDriverInit(); // Initialize display chip
  216:	8b df       	rcall	.-234    	; 0x12e <displayDriverInit>
 // clear display (all zero's)
 for (char i =1; i<=4; i++)
@@ -415,9 +415,9 @@ for (char i =1; i<=4; i++)
  228:	77 df       	rcall	.-274    	; 0x118 <spi_slaveDeSelect>
  22a:	cf 5f       	subi	r28, 0xFF	; 255
 
-timer1Init();
-spi_masterInit(); // Initialize spi module
-displayDriverInit(); // Initialize display chip
+	timer1Init();
+	spi_masterInit(); // Initialize spi module
+	displayDriverInit(); // Initialize display chip
 // clear display (all zero's)
 for (char i =1; i<=4; i++)
  22c:	c5 30       	cpi	r28, 0x05	; 5
@@ -427,17 +427,17 @@ for (char i =1; i<=4; i++)
 	spi_slaveDeSelect(0); // Deselect display chip
 }
 // set first dot for hours
-spi_slaveSelect(0); // Select display chip
+	spi_slaveSelect(0); // Select display chip
  230:	80 e0       	ldi	r24, 0x00	; 0
  232:	66 df       	rcall	.-308    	; 0x100 <spi_slaveSelect>
-spi_write(3); // digit adress: (digit place)
+	spi_write(3); // digit adress: (digit place)
  234:	83 e0       	ldi	r24, 0x03	; 3
  236:	60 df       	rcall	.-320    	; 0xf8 <spi_write>
-spi_write(NumbersDotted[0]); // digit value: 0
+	spi_write(NumbersDotted[0]); // digit value: 0
  238:	80 e8       	ldi	r24, 0x80	; 128
  23a:	5e df       	rcall	.-324    	; 0xf8 <spi_write>
  23c:	80 e0       	ldi	r24, 0x00	; 0
-spi_slaveDeSelect(0); // Deselect display chip
+	spi_slaveDeSelect(0); // Deselect display chip
  23e:	6c df       	rcall	.-296    	; 0x118 <spi_slaveDeSelect>
  240:	8a e0       	ldi	r24, 0x0A	; 10
  242:	90 e0       	ldi	r25, 0x00	; 0
